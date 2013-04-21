@@ -1,0 +1,30 @@
+Name:               fp-syd-free-demo
+Version:            0.0.1
+License:            BSD3
+Author:             Mark Hibberd <mark@hibberd.id.au>
+Maintainer:         Mark Hibberd <mark@hibberd.id.au>
+Copyright:          Mark Hibberd
+Synopsis:           Demo package for Code for FP-Syd talk on Free.
+Category:           Experimental
+Description:        Demo package for Code for FP-Syd talk on Free.
+Homepage:           https://github.com/markhibberd/fp-syd-free
+Cabal-Version:      >= 1.6
+Build-Type:         Simple
+
+Source-Repository   head
+  Type:             git
+  Location:         https://github.com/markhibberd/fp-syd-free.git
+
+Flag                small_base
+  Description:      Choose the new, split-up base package.
+
+Executable          fp-syd-free-demo
+  Hs-Source-Dirs:
+                    ../../src .
+
+  Main-Is:
+                    Main.hs
+
+  Build-Depends:
+                   base >= 3 && < 5
+
