@@ -24,7 +24,11 @@ Flag                small_base
 Library
   Build-Depends:
                     base                            >= 3          && < 5
-
+                  , free                            >= 3.4
+                  , text                            >= 0.11
+                  , pwstore-fast                    >= 2.3
+                  , containers                      >= 0.4
+                  , pureMD5                         >= 2.1
   GHC-Options:
                     -Wall -fno-warn-orphans
 
@@ -36,6 +40,5 @@ Library
                     Talks.Free.Prelude
                     Talks.Free.Core
                     Talks.Free.Alt
-                    Talks.Free.Free
                     Talks.Free.Ugly
                     Talks.Free.UglyExample

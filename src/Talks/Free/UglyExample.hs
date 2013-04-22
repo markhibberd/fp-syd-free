@@ -6,7 +6,7 @@ import Talks.Free.Ugly
 
 import Data.Text (unpack)
 import Data.Monoid ((<>))
-import Data.Foldable (any)
+import Data.Foldable (elem)
 
 runUglyExample :: IO ()
 runUglyExample =
@@ -26,7 +26,7 @@ runUglyExample =
 
      storePassword "p2" p2
 
-     -- generate and store a sekrit password
+     -- generate and store some more passwords
 
      clearSetting "password.length"
 
@@ -34,22 +34,40 @@ runUglyExample =
 
      p3 <- mkPassword
 
-     storePassword "p3" p3
+     p4 <- mkPassword
+
+     let p5 = "passw0rd"
+
+     storePassword "p3" p4 -- Oops!
+
+     storePassword "p4" p4
+
+     storePassword "p5" p5
 
      setSetting "log.level" "noisy"
 
      p1' <- lookupPassword "p1"
      p2' <- lookupPassword "p2"
      p3' <- lookupPassword "p3"
+     p4' <- lookupPassword "p4"
+     p5' <- lookupPassword "p5"
 
-     if any (p1 ==) p1'
-       then putStrLn $ "=== store worked as expected: " <> unpack p1
-       else putStrLn "=== what happened?"
+     putStrLn $ if p1 `elem` p1'
+       then "=== store worked as expected: " <> unpack p1
+       else "=== what happened?"
 
-     if any (p2 ==) p2'
-       then putStrLn $ "=== store worked as expected: " <> unpack p2
-       else putStrLn "=== what happened?"
+     putStrLn $ if p2 `elem` p2'
+       then "=== store worked as expected: " <> unpack p2
+       else "=== what happened?"
 
-     if any (p3 ==) p3'
-       then putStrLn $ "=== store worked as expected: " <> unpack p3
-       else putStrLn "=== what happened?"
+     putStrLn $ if p3 `elem` p3'
+       then "=== store worked as expected: " <> unpack p3
+       else "=== what happened?"
+
+     putStrLn $ if p4 `elem` p4'
+       then "=== store worked as expected: " <> unpack p4
+       else "=== what happened?"
+
+     putStrLn $ if p5 `elem` p5'
+       then "=== store worked as expected: " <> unpack p5
+       else "=== what happened?"

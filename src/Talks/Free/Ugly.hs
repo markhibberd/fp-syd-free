@@ -19,7 +19,7 @@ import Data.Text.Encoding (decodeUtf8)
 import Data.Text.Lazy.Encoding (encodeUtf8)
 import Data.Map (Map)
 import Data.Monoid ((<>))
-import Data.Foldable (any)
+import Data.Foldable (elem)
 import Data.Digest.Pure.MD5 (md5)
 import qualified Data.Map as Map
 
@@ -87,7 +87,7 @@ lookupPassword' key =
 mkPassword' :: IO Text
 mkPassword' =
   do value <- fmap (md5sum . decodeUtf8 . exportSalt) genSaltIO
-     maybe value (\n -> take n value) <$> getPasswordLength
+     maybe value (`take` value) <$> getPasswordLength
 
 storePassword' :: Text -> Text -> IO ()
 storePassword' key value =
@@ -139,7 +139,7 @@ setSettings ss =
 
 getPasswordLength :: IO (Maybe Int)
 getPasswordLength =
-  (\s -> read . unpack <$> s) <$> (getSetting "password.length")
+  (\s -> read . unpack <$> s) <$> getSetting "password.length"
 
 md5sum :: Text -> Text
 md5sum =
@@ -155,7 +155,7 @@ prnt =
 log :: Text -> IO ()
 log message =
   do level <- getSetting' "log.level"
-     let noisy = any ((==) "noisy") level
+     let noisy = "noisy" `elem` level
      when noisy (putStrLn . unpack $ message)
      when noisy (putStrLn "")
 
