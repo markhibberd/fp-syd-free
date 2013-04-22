@@ -40,5 +40,7 @@ Library
                     Talks.Free.Prelude
                     Talks.Free.Core
                     Talks.Free.Alt
+                    Talks.Free.Language
+                    Talks.Free.LanguageExample
                     Talks.Free.Ugly
                     Talks.Free.UglyExample
