@@ -33,7 +33,9 @@ Library
 
   Exposed-Modules:
                     Talks.Free
+                    Talks.Free.Prelude
                     Talks.Free.Core
                     Talks.Free.Alt
                     Talks.Free.Free
                     Talks.Free.Ugly
+                    Talks.Free.UglyExample
