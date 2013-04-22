@@ -1,0 +1,7 @@
+:set -isrc -idist/build/autogen
+:set -Wall 
+:l Talks.Free
+:m + Talks.Free
+:set prompt ">> "
+
+
