@@ -54,8 +54,11 @@ describe :: Show a => Free Language a -> [Text]
 describe (Pure a) =
   ["a value: " <> (pack . show $ a)]
 describe (Free (GenPassword _ key next)) =
-  ("Generate and store password with key " <> key <> "\n") : (describe next)
+  ("Generate and store password with key " <> key) :
+    (describe next)
 describe (Free (SetPassword key _ next)) =
-  ("Set a password word with key " <> key <> "\n") : (describe next)
+  ("Set a password word with key " <> key) :
+    (describe next)
 describe (Free (GetPassword key next)) =
-  ("Get a password word with key " <> key <> "\n") : (describe $ next Nothing)
+  ("Get a password word with key " <> key) :
+    (describe $ next (Just "<password>"))
