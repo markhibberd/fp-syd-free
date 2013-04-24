@@ -6,6 +6,7 @@ import Talks.Free.Ugly
 
 import Control.Monad.Free
 import Data.Text
+import Data.Monoid ((<>))
 
 data Language a =
     GenPassword (Maybe Int) Text a
@@ -19,27 +20,24 @@ instance Functor Language where
 
 type Passwords a = Free Language a
 
-freeLanguage :: Language a -> Passwords a
-freeLanguage language=
-  Free (fmap Pure language)
-
 genPw :: Maybe Int -> Text -> Passwords ()
 genPw n key =
-  freeLanguage $ GenPassword n key ()
+  liftF $ GenPassword n key ()
 
 setPw :: Text -> Text -> Passwords ()
 setPw key pw =
-  freeLanguage $ SetPassword key pw ()
+  liftF $ SetPassword key pw ()
 
 getPw :: Text -> Passwords (Maybe Text)
 getPw key =
-  freeLanguage $ GetPassword key id
+  liftF $ GetPassword key id
 
 interpret :: Free Language a -> IO a
 interpret (Pure a) =
   return a
 interpret (Free (GenPassword n key next)) =
-  do void $ mapM (\i -> setSetting "password.length" (pack . show $ i)) n
+  do clearSetting "password.length"
+     void $ mapM (\i -> setSetting "password.length" (pack . show $ i)) n
      pw <- mkPassword
      clearSetting "password.length"
      storePassword key pw
@@ -50,3 +48,14 @@ interpret (Free (SetPassword key pw next)) =
 interpret (Free (GetPassword key next)) =
   do pw <- lookupPassword key
      interpret $ next pw
+
+
+describe :: Show a => Free Language a -> [Text]
+describe (Pure a) =
+  ["a value: " <> (pack . show $ a)]
+describe (Free (GenPassword _ key next)) =
+  ("Generate and store password with key " <> key <> "\n") : (describe next)
+describe (Free (SetPassword key _ next)) =
+  ("Set a password word with key " <> key <> "\n") : (describe next)
+describe (Free (GetPassword key next)) =
+  ("Get a password word with key " <> key <> "\n") : (describe $ next Nothing)
