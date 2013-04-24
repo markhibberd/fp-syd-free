@@ -7,4 +7,5 @@ import Control.Applicative as X ((<$>), (<*>), (*>), (<*), pure)
 import Control.Monad as X (void, when, unless, liftM, (>>=), return)
 import Data.Functor as X (Functor, fmap)
 import Data.Traversable as X (mapM)
+import Data.Foldable as X (mapM_)
 import Data.Maybe as X

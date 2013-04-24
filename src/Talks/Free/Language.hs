@@ -37,7 +37,7 @@ interpret (Pure a) =
   return a
 interpret (Free (GenPassword n key next)) =
   do clearSetting "password.length"
-     void $ mapM (\i -> setSetting "password.length" (pack . show $ i)) n
+     mapM_ (\i -> setSetting "password.length" (pack . show $ i)) n
      pw <- mkPassword
      clearSetting "password.length"
      storePassword key pw
