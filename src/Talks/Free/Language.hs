@@ -18,19 +18,21 @@ instance Functor Language where
   fmap f (SetPassword key pw a) = SetPassword key pw (f a)
   fmap f (GetPassword key t) = GetPassword key (f . t)
 
-type Passwords a = Free Language a
 
-genPw :: Maybe Int -> Text -> Passwords ()
+
+genPw :: Maybe Int -> Text -> Free Language ()
 genPw n key =
   liftF $ GenPassword n key ()
 
-setPw :: Text -> Text -> Passwords ()
+setPw :: Text -> Text -> Free Language ()
 setPw key pw =
   liftF $ SetPassword key pw ()
 
-getPw :: Text -> Passwords (Maybe Text)
+getPw :: Text -> Free Language (Maybe Text)
 getPw key =
   liftF $ GetPassword key id
+
+
 
 interpret :: Free Language a -> IO a
 interpret (Pure a) =
@@ -50,15 +52,13 @@ interpret (Free (GetPassword key next)) =
      interpret $ next pw
 
 
+
 describe :: Show a => Free Language a -> [Text]
 describe (Pure a) =
   ["a value: " <> (pack . show $ a)]
 describe (Free (GenPassword _ key next)) =
-  ("Generate and store password with key " <> key) :
-    (describe next)
+  ("Generate and store password with key " <> key) : describe next
 describe (Free (SetPassword key _ next)) =
-  ("Set a password word with key " <> key) :
-    (describe next)
+  ("Set a password word with key " <> key) : describe next
 describe (Free (GetPassword key next)) =
-  ("Get a password word with key " <> key) :
-    (describe $ next (Just "<password>"))
+  ("Get a password word with key " <> key) : describe (next (Just "<password>"))

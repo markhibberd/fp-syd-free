@@ -21,8 +21,8 @@ program =
 
 runLanguageInterpret :: IO ()
 runLanguageInterpret =
-  do r <- interpret $ program
-     putStrLn $ show r
+  do r <- interpret program
+     print r
 
 runLanguageDescribe :: IO ()
 runLanguageDescribe = putStrLn . unpack . intercalate "\n" . describe $ program
